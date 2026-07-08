@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: stop-dependent-envs
+  namespace: automation
+spec:
+  schedule: "0 18 * * 1-5"
+  timeZone: "Africa/Johannesburg"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: env-scheduler
+          restartPolicy: OnFailure
+          containers:
+            - name: kubectl
+              image: bitnami/kubectl:latest
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  echo "Stopping dependent environments first..."
+                  kubectl scale deployment hello-app -n env-a --replicas=0
+                  kubectl scale deployment hello-app -n env-b --replicas=0
+                  kubectl scale deployment hello-app -n env-c --replicas=0
+                  kubectl scale deployment hello-app -n customer-uat --replicas=0
+                  echo "Dependent environments stopped."

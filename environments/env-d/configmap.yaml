@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hello-config
+data:
+  ENV_NAME: "env-d"
+  ENV_ROLE: "shared-dependency"
+  GREETING_MESSAGE: "Hello from env-d, the shared dependency."
+  DEPENDENCY_URL: ""

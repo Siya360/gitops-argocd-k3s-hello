@@ -1,0 +1,7 @@
+resources:
+  - namespace.yaml
+  - rbac.yaml
+  - start-env-d.yaml
+  - start-dependent-envs.yaml
+  - stop-dependent-envs.yaml
+  - stop-env-d.yaml

@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: start-env-d
+  namespace: automation
+spec:
+  schedule: "30 6 * * 1-5"
+  timeZone: "Africa/Johannesburg"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: env-scheduler
+          restartPolicy: OnFailure
+          containers:
+            - name: kubectl
+              image: bitnami/kubectl:latest
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  echo "Starting env-d..."
+                  kubectl scale deployment hello-app -n env-d --replicas=1
+                  kubectl wait --for=condition=available deployment/hello-app -n env-d --timeout=120s
+                  echo "env-d is available."

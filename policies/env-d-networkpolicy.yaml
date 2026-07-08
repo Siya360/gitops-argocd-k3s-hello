@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: env-d-ingress-restricted
+  namespace: env-d
+spec:
+  podSelector:
+    matchLabels:
+      app: hello-app
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              access-env-d: "true"
+      ports:
+        - protocol: TCP
+          port: 3000

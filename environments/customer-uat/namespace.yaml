@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: customer-uat
+  labels:
+    access-env-d: "true"
+    environment-type: "customer-uat"

@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: customer-uat
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Siya360/gitops-argocd-k3s-hello.git
+    targetRevision: feature/bancx-gitops-simulation
+    path: environments/customer-uat
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: customer-uat
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

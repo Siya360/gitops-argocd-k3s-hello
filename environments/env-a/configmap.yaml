@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hello-config
+data:
+  ENV_NAME: "env-a"
+  ENV_ROLE: "dependent-test-environment"
+  GREETING_MESSAGE: "Hello from env-a. I depend on env-d."
+  DEPENDENCY_URL: "http://hello-app.env-d.svc.cluster.local"

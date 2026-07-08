@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: start-dependent-envs
+  namespace: automation
+spec:
+  schedule: "45 6 * * 1-5"
+  timeZone: "Africa/Johannesburg"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: env-scheduler
+          restartPolicy: OnFailure
+          containers:
+            - name: kubectl
+              image: bitnami/kubectl:latest
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  echo "Waiting for env-d before starting dependents..."
+                  kubectl wait --for=condition=available deployment/hello-app -n env-d --timeout=120s
+                  echo "Scaling env-a, env-b, env-c, customer-uat..."
+                  kubectl scale deployment hello-app -n env-a --replicas=1
+                  kubectl scale deployment hello-app -n env-b --replicas=1
+                  kubectl scale deployment hello-app -n env-c --replicas=1
+                  kubectl scale deployment hello-app -n customer-uat --replicas=1
+                  echo "Dependent environments started."

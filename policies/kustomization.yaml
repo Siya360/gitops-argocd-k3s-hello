@@ -1,0 +1,4 @@
+resources:
+  - resourcequota.yaml
+  - limitrange.yaml
+  - env-d-networkpolicy.yaml
