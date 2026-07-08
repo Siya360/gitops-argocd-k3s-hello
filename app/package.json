@@ -1,0 +1,9 @@
+{
+  "name": "gitops-hello",
+  "version": "1.0.0",
+  "description": "Simple Hello app for GitOps demo",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
