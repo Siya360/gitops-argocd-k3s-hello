@@ -26,10 +26,13 @@ echo ""
 echo "=== Dependency Reachability Tests ==="
 for src in env-a env-b env-c customer-uat; do
   echo "--- Testing $src -> env-d ---"
-  kubectl run "curl-test-$src" --rm -i --restart=Never \
-    --image=curlimages/curl:latest -n "$src" \
-    -- curl -s -o /dev/null -w "%{http_code}" http://hello-app.env-d.svc.cluster.local/healthz \
-    2>/dev/null || echo "Test from $src failed"
+  pod=$(kubectl get pods -n "$src" -l app=hello-app -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || true)
+  if [ -n "$pod" ]; then
+    code=$(kubectl exec -n "$src" "$pod" -- wget -qO- http://hello-app.env-d.svc.cluster.local/healthz 2>/dev/null && echo "200" || echo "fail")
+    echo "  Result: $code"
+  else
+    echo "  No pod found in $src"
+  fi
   echo ""
 done
 
