@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/thabisoradebe/gitops-argocd-k3s-hello.git
+    repoURL: https://github.com/Siya360/gitops-argocd-k3s-hello.git
     targetRevision: main
     path: k8s
   destination:
